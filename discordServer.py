@@ -21,7 +21,7 @@ async def on_message(message:discord.Message):
             if "text/csv" in attachment.content_type:
                 await attachment.save("temp/reciveCsvFile.csv")
                 updateDataDict("temp/reciveCsvFile.csv")
-                message.reply("データを受け付けました")
+                await message.reply("データを受け付けました")
 
 
 
