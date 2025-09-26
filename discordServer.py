@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
-client = discord.Client(intents=discord.Intents.all)
+client = discord.Client(intents=discord.Intents.all())
 
 dukiGeneral.TryMakeDir("data")
 dukiGeneral.TryMakeDir("temp")
