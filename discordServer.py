@@ -7,8 +7,8 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 client = discord.Client(intents=discord.Intents.all())
 
-dukiGeneral.TryMakeDir("data")
-dukiGeneral.TryMakeDir("temp")
+dukiGeneral.TryMakeDir("./data")
+dukiGeneral.TryMakeDir("./temp")
 
 
 @client.event
