@@ -13,7 +13,7 @@ dukiGeneral.TryMakeDir("temp")
 
 @client.event
 async def on_message(message:discord.Message):
-    if message.channel.id!=1420093711110508595:
+    if message.channel.id!=1420095519543263282:
         return
     if len(message.attachments) != 0:
         for attachment in message.attachments:
