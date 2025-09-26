@@ -7,20 +7,21 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN")
 client = discord.Client(intents=discord.Intents.all())
 
-dukiGeneral.TryMakeDir("data")
-dukiGeneral.TryMakeDir("temp")
+dukiGeneral.TryMakeDir("./data")
+dukiGeneral.TryMakeDir("./temp")
 
 
 @client.event
 async def on_message(message:discord.Message):
-    if message.channel.id!=1420093711110508595:
+    if message.channel.id!=1420095519543263282:
         return
     if len(message.attachments) != 0:
         for attachment in message.attachments:
-            if attachment.content_type=="text/csv":
-                attachment.save("temp/reciveCsvFile.csv")
+            #print(f"attachments_detect! type:{attachment.content_type}")
+            if "text/csv" in attachment.content_type:
+                await attachment.save("temp/reciveCsvFile.csv")
                 updateDataDict("temp/reciveCsvFile.csv")
-                message.reply("データを受け付けました")
+                await message.reply("データを受け付けました")
 
 
 
