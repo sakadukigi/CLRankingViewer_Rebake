@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.getenv()
+TOKEN = os.getenv("TOKEN")
 client = discord.Client(intents=discord.Intents.all)
 
 dukiGeneral.TryMakeDir("data")
@@ -13,6 +13,8 @@ dukiGeneral.TryMakeDir("temp")
 
 @client.event
 async def on_message(message:discord.Message):
+    if message.channel.id!=1420093711110508595:
+        return
     if len(message.attachments) != 0:
         for attachment in message.attachments:
             if attachment.filename[:4]==".csv":
