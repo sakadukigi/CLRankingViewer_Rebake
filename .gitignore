@@ -2,4 +2,5 @@
 data/
 temp/
 .env
-log/S
+log/
+__pycache__/
