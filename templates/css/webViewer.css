@@ -22,6 +22,6 @@ table th, table td {
     background: red;
 }
 
-.class-S .class-SS .class-SSS {
+.class-S, .class-SS, .class-SSS {
     background: yellow;
 }
