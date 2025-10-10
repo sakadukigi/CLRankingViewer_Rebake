@@ -58,7 +58,7 @@ def webViewer():
         result += f"<td>{math.floor(playerCount*i)}位以上</td>"
     result += "</tr>\n"
 
-    result += '<tr><th class="class-C">降格ボーダー</th>'
+    result += '<tr><th class="class-B">降格ボーダー</th>'
     for i in RANK_KEEPAREA:
         result += f"<td>{math.floor(playerCount*i)+1}位以下</td>"
     result += "</tr>\n"
