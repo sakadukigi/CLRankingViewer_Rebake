@@ -75,7 +75,7 @@ def webViewer():
 
 @app.route("/css/<cssdata>")
 def ReturnCSS(cssdata:str):
-    return template_rendered(f"css/{cssdata}")
+    return render_template(f"css/{cssdata}")
 
 if __name__=="__main__":
     app.run(debug=False,port=10000)
