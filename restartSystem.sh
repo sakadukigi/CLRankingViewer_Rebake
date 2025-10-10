@@ -1,0 +1,2 @@
+systemctl restart CLRankingViewerDiscord.service
+systemctl restart CLRankingViewerWeb.service
