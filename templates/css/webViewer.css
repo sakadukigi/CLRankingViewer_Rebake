@@ -4,10 +4,11 @@ table {
 
 table th, table td {
   border: solid 1px black;
+  text-align: center;
 }
 
-.class-D {
-    background: burlywood;
+.class-D, .rank-3{
+    background: brown;
 }
 
 .class-C {
@@ -22,6 +23,10 @@ table th, table td {
     background: red;
 }
 
-.class-S, .class-SS, .class-SSS{
-    background: yellow;
+.class-S, .class-SS, .class-SSS, .rank-1{
+    background: gold;
+}
+
+.rank-2{
+    background: silver;
 }

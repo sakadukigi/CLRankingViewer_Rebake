@@ -58,7 +58,7 @@ def webViewer():
         result += f"<td>{math.floor(playerCount*i)}位以上</td>"
     result += "</tr>\n"
 
-    result += '<tr><th class="class-B">降格ボーダー</th>'
+    result += '<tr><th class="class-C">降格ボーダー</th>'
     for i in RANK_KEEPAREA:
         result += f"<td>{math.floor(playerCount*i)+1}位以下</td>"
     result += "</tr>\n"
@@ -68,7 +68,7 @@ def webViewer():
     result += "<tr><th>Rank</th><th>PlayerName</th><th>Points</th><th>G</th></tr>\n"
     for i in rankingData["data"]:
         index += 1
-        result += f'<tr><td>{index}</td><td>{i["name"]}</td><td>{i["point"]}</td><td>{i["battleAmount"]}</td></tr>\n'
+        result += f'<tr><td class="rank-{index}">{index}</td><td>{i["name"]}</td><td>{i["point"]}</td><td>{i["battleAmount"]}</td></tr>\n'
     result += "</table>"
 
     return result
