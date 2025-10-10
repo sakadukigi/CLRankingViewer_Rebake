@@ -1,0 +1,27 @@
+table {
+    border-collapse: collapse
+}
+
+table th, table td {
+  border: solid 1px black;
+}
+
+.class-D {
+    background: burlywood;
+}
+
+.class-C {
+    background: greenyellow;
+}
+
+.class-B {
+    background: skyblue;
+}
+
+.class-A {
+    background: red;
+}
+
+.class-S .class-SS .class-SSS {
+    background: yellow;
+}

@@ -15,29 +15,22 @@ RANK_KEEPAREA = [0.90, 0.80, 0.70, 0.65, 0.60, 0.60, 0.60]
 dukiGeneral.TryMakeDir("data")
 dukiGeneral.TryMakeDir("temp")
 
-def GetRankingData(path:str) -> dict:
-    if os.path.isfile(path):
-        with open(path) as f:
-            rankingData = json.load(f)
-    else:
-        rankingData = RANKINGDATA_ONBLANK
-    return rankingData
 
-    
 
 @app.route("/download")
 def DataDownload():
-    rankingData = GetRankingData("data/rankingData.json")
+    rankingData = dukiGeneral.GetRankingData(dukiGeneral.RANKINGDATA_PATH)
     
     return jsonify(rankingData)
 
 @app.route("/web_viewer")
 def webViewer():
-    rankingData = GetRankingData("data/rankingData.json")
+    rankingData = dukiGeneral.GetRankingData(dukiGeneral.RANKINGDATA_PATH)
     playerCount = len(rankingData["data"])
 
     index = 0
     result = ""
+    result += '<link rel="stylesheet" href="/css/webViewer.css">'
     result += "<title>ChampionLeague ランキング</title>\n"
     result += f"TotalPlayer : {playerCount}\n"
     result += f'<p>Update : {rankingData["lastUpdate"]}</p>\n'
@@ -79,6 +72,10 @@ def webViewer():
     result += "</table>"
 
     return result
+
+@app.route("css/<cssdata>")
+def ReturnCSS(cssdata:str):
+    return template_rendered(f"css/{cssdata}")
 
 if __name__=="__main__":
     app.run(debug=False,port=10000)
