@@ -37,7 +37,10 @@ def webViewer():
 
     result += "<table>\n<tr><th></th>"
     for i in RANK_LIST:
-        result += f'<th class="class-{i}">{i}</th>'
+        j = i
+        if "S" in j:
+            j="S"
+        result += f'<th class="class-{j}">{i}</th>'
     result += "</tr>\n"
 
     result += '<tr><th class="class-S">飛び級ボーダー</th>'
