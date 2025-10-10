@@ -15,39 +15,32 @@ RANK_KEEPAREA = [0.90, 0.80, 0.70, 0.65, 0.60, 0.60, 0.60]
 dukiGeneral.TryMakeDir("data")
 dukiGeneral.TryMakeDir("temp")
 
-def GetRankingData(path:str) -> dict:
-    if os.path.isfile(path):
-        with open(path) as f:
-            rankingData = json.load(f)
-    else:
-        rankingData = RANKINGDATA_ONBLANK
-    return rankingData
 
-    
 
 @app.route("/download")
 def DataDownload():
-    rankingData = GetRankingData("data/rankingData.json")
+    rankingData = dukiGeneral.GetRankingData(dukiGeneral.RANKINGDATA_PATH)
     
     return jsonify(rankingData)
 
 @app.route("/web_viewer")
 def webViewer():
-    rankingData = GetRankingData("data/rankingData.json")
+    rankingData = dukiGeneral.GetRankingData(dukiGeneral.RANKINGDATA_PATH)
     playerCount = len(rankingData["data"])
 
     index = 0
     result = ""
+    result += '<link rel="stylesheet" href="/css/webViewer.css">'
     result += "<title>ChampionLeague ランキング</title>\n"
     result += f"TotalPlayer : {playerCount}\n"
     result += f'<p>Update : {rankingData["lastUpdate"]}</p>\n'
 
     result += "<table>\n<tr><th></th>"
     for i in RANK_LIST:
-        result += f"<th>{i}</th>"
+        result += f'<th class="class-{i}">{i}</th>'
     result += "</tr>\n"
 
-    result += "<tr><th>飛び級ボーダー</th>"
+    result += '<tr><th class="class-S">飛び級ボーダー</th>'
     for i in RANK_SKIPAREA:
         if(i==0.0):
             result += f"<td>-----</td>"
@@ -55,30 +48,34 @@ def webViewer():
             result += f"<td>{math.floor(playerCount*i)}位以上</td>"
     result += "</tr>\n"
 
-    result += "<tr><th>昇級ボーダー</th>"
+    result += '<tr><th class="class-A">昇級ボーダー</th>'
     for i in RANK_UPAREA:
         result += f"<td>{math.ceil(playerCount*i)}位以上</td>"
     result += "</tr>\n"
     
-    result += "<tr><th>維持ボーダー</th>"
+    result += '<tr><th class="class-C">維持ボーダー</th>'
     for i in RANK_KEEPAREA:
         result += f"<td>{math.floor(playerCount*i)}位以上</td>"
     result += "</tr>\n"
 
-    result += "<tr><th>降格ボーダー</th>"
+    result += '<tr><th class="class-B">降格ボーダー</th>'
     for i in RANK_KEEPAREA:
         result += f"<td>{math.floor(playerCount*i)+1}位以下</td>"
     result += "</tr>\n"
-    result += "</table>\n"
+    result += "</table>\n<br>"
 
     result += "<table>\n"
     result += "<tr><th>Rank</th><th>PlayerName</th><th>Points</th><th>G</th></tr>\n"
     for i in rankingData["data"]:
         index += 1
-        result += f'<tr><td>{index}</td><td>{i["name"]}</td><td>{i["point"]}</td><td>{i["battleAmount"]}</td></tr>\n'
+        result += f'<tr><td class="rank-{index}">{index}</td><td>{i["name"]}</td><td>{i["point"]}</td><td>{i["battleAmount"]}</td></tr>\n'
     result += "</table>"
 
     return result
+
+@app.route("/css/<cssdata>")
+def ReturnCSS(cssdata:str):
+    return render_template(f"css/{cssdata}")
 
 if __name__=="__main__":
     app.run(debug=False,port=10000)

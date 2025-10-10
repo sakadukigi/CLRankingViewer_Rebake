@@ -1,4 +1,4 @@
-import discord,os,csv,datetime,json
+import discord,os,csv,datetime,json,time
 import dukiGeneral
 from dotenv import load_dotenv
 
@@ -21,7 +21,10 @@ async def on_message(message:discord.Message):
             if "text/csv" in attachment.content_type:
                 await attachment.save("temp/reciveCsvFile.csv")
                 updateDataDict("temp/reciveCsvFile.csv")
-                await message.reply("データを受け付けました")
+
+                embed = discord.Embed(title="データを受け付けました",description="Data Recived")
+                embed.set_footer(f"date:<t:{time.time()}:F>")
+                await message.channel.send(embed=embed)
 
 
 

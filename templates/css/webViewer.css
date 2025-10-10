@@ -1,0 +1,32 @@
+table {
+    border-collapse: collapse
+}
+
+table th, table td {
+  border: solid 1px black;
+  text-align: center;
+}
+
+.class-D, .rank-3{
+    background: burlywood;
+}
+
+.class-C {
+    background: greenyellow;
+}
+
+.class-B {
+    background: skyblue;
+}
+
+.class-A {
+    background: red;
+}
+
+.class-S, .class-SS, .class-SSS, .rank-1{
+    background: gold;
+}
+
+.rank-2{
+    background: silver;
+}
