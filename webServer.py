@@ -73,7 +73,7 @@ def webViewer():
 
     return result
 
-@app.route("css/<cssdata>")
+@app.route("/css/<cssdata>")
 def ReturnCSS(cssdata:str):
     return template_rendered(f"css/{cssdata}")
 
