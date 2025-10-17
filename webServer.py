@@ -114,7 +114,7 @@ def discordAuth():
         if r.status_code != 200:
             logging.error(f"Failed UserData Request\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
-        if r.json["id"] not in adminList:
+        if r.json()["id"] not in adminList:
             logging.warning(f"Cant Auth User\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>403 Forbidden</p><br><p>権限がありません</p>", 403
         else:
@@ -123,7 +123,7 @@ def discordAuth():
             maxAge = time.time() + 3600
             response.set_cookie("sessionID", value=sessionID, max_age=maxAge)
 
-            loginSessions[sessionID] = {"id": r.json["id"],"token": token}
+            loginSessions[sessionID] = {"id": r.json()["id"],"token": token}
 
             return response
 
