@@ -109,7 +109,7 @@ def discordAuth():
     
         token = f'Bearer {r.json()["access_token"]}'
         headers = {"Authorization": token}
-        r = request.get("https://discordapp.com/api/users/@me", headers=headers)
+        r = requests.get("https://discordapp.com/api/users/@me", headers=headers)
 
         if r.status_code != 200:
             logging.error(f"Failed UserData Request\n{r.content}")
