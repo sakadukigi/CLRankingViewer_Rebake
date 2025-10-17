@@ -1,6 +1,6 @@
 from flask import *
 import time,csv,os,math,requests
-import dukiGeneral
+import dukiGeneral,uuid
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -20,6 +20,8 @@ with open("data/adminList.json") as f:
 
 RANKINGDATA_ONBLANK = {"lastUpdate" : "----/--/-- --:--:--",
                "data" : []}
+
+loginSessions = {}
 
 RANK_LIST = ["D","C","B","A","S","SS","SSS"]
 RANK_SKIPAREA = [0.25, 0.20, 0.15, 0.10, 0.0, 0.0, 0.0]
@@ -105,9 +107,28 @@ def discordAuth():
         r = requests.post("https://discordapp.com/api/oauth2/token", json=jsonBody)
         if r.status_code != 200:
             print(f"Failed Code Request\n{r.content}")
-            return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>"
-        
+            return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
+    
+        token = f"Bearer {r.json['access_token']}"
+        headers = {"Authorization": token}
+        r = request.get("https://discordapp.com/api/users/@me", headers=headers)
 
+        if r.status_code != 200:
+            print(f"Failed UserData Request\n{r.content}")
+            return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
+        if r.json["id"] not in adminList:
+            return "<h1>Failed Auth by Discord</h1><br><p>403 Forbidden</p><br><p>権限がありません</p>", 403
+        else:
+            response = make_response("Auth!!!")
+            sessionID = str(uuid.uuid4())
+            maxAge = time.time() + 3600
+            response.set_cookie("sessionID", value=sessionID, max_age=maxAge)
+
+            loginSessions[sessionID] = {"id": r.json["id"],"token": token}
+
+            return response
+
+    
     
 
 if __name__=="__main__":
