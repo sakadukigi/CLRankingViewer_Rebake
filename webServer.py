@@ -107,7 +107,7 @@ def discordAuth():
             logging.error(f"Failed Code Request\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
     
-        token = f"Bearer {r.json['access_token']}"
+        token = f'Bearer {r.json()["access_token"]}'
         headers = {"Authorization": token}
         r = request.get("https://discordapp.com/api/users/@me", headers=headers)
 
