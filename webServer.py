@@ -102,14 +102,14 @@ def discordAuth():
             "code" : code,
             "redirect_uri" : "https://vrchat.sakaduki.com/auth/discord",
         }
-        r = requests.post("https://discordapp.com/api/oauth2/token", json=jsonBody)
+        r = requests.post("https://discordapp.com/api/oauth2/token", data=jsonBody, auth = (CLIENT_ID, CLIENT_SECRET))
         if r.status_code != 200:
             logging.error(f"Failed Code Request\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
     
         token = f"Bearer {r.json['access_token']}"
         headers = {"Authorization": token}
-        r = request.get("https://discordapp.com/api/users/@me", headers=headers, auth = (CLIENT_ID, CLIENT_SECRET))
+        r = request.get("https://discordapp.com/api/users/@me", headers=headers)
 
         if r.status_code != 200:
             logging.error(f"Failed UserData Request\n{r.content}")
