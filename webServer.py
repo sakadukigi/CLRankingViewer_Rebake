@@ -94,6 +94,10 @@ def ReturnCSS(cssdata:str):
 @app.route("/auth/discord", methods = ["GET","POST"])
 def discordAuth():
     code = request.args.get("code")
+
+    if requests.cookies.get("sessionID") in loginSessions:
+        return "You are Already Authed!!\n(あなたはすでに認証されています)", 200
+
     if code == None:
         return redirect("https://discord.com/oauth2/authorize?client_id=1420093711110508595&response_type=code&redirect_uri=https%3A%2F%2Fvrchat.sakaduki.com%2Fauth%2Fdiscord&scope=identify")
     else:
