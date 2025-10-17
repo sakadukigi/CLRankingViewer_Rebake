@@ -11,7 +11,7 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 OWNER_DISCORD_ID = os.getenv("OWNER_DISCORD_ID")
 
 
-while os.path.isfile("data/adminList.json"):
+while not os.path.isfile("data/adminList.json"):
     print("waitingGenerateData...")
     time.sleep(1)
 
