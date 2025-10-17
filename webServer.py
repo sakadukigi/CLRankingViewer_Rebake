@@ -89,7 +89,7 @@ def webViewer():
 def ReturnCSS(cssdata:str):
     return render_template(f"css/{cssdata}")
 
-@app.route("/auth/discord", method = ["GET","POST"])
+@app.route("/auth/discord", methods = ["GET","POST"])
 def discordAuth():
     code = request.args.get("code")
     if code == None:
