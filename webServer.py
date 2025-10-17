@@ -1,8 +1,22 @@
 from flask import *
-import time,csv,os,math
+import time,csv,os,math,requests
 import dukiGeneral
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+
+load_dotenv()
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+OWNER_DISCORD_ID = os.getenv("OWNER_DISCORD_ID")
+
+
+while os.path.isfile("data/adminList.json"):
+    print("waitingGenerateData...")
+    time.sleep(1)
+
+with open("data/adminList.json") as f:
+    adminList = json.load(f)
 
 RANKINGDATA_ONBLANK = {"lastUpdate" : "----/--/-- --:--:--",
                "data" : []}
@@ -14,8 +28,6 @@ RANK_KEEPAREA = [0.90, 0.80, 0.70, 0.65, 0.60, 0.60, 0.60]
 
 dukiGeneral.TryMakeDir("data")
 dukiGeneral.TryMakeDir("temp")
-
-
 
 @app.route("/download")
 def DataDownload():
@@ -40,7 +52,7 @@ def webViewer():
         result += f'<th class="class-{i}">{i}</th>'
     result += "</tr>\n"
 
-    result += '<tr><th class="class-S">飛び級ボーダー</th>'
+    result += '<tr><th class="class-S">飛び級</th>'
     for i in RANK_SKIPAREA:
         if(i==0.0):
             result += f"<td>-----</td>"
@@ -48,17 +60,17 @@ def webViewer():
             result += f"<td>{math.floor(playerCount*i)}位以上</td>"
     result += "</tr>\n"
 
-    result += '<tr><th class="class-A">昇級ボーダー</th>'
+    result += '<tr><th class="class-A">昇級</th>'
     for i in RANK_UPAREA:
         result += f"<td>{math.ceil(playerCount*i)}位以上</td>"
     result += "</tr>\n"
     
-    result += '<tr><th class="class-C">維持ボーダー</th>'
+    result += '<tr><th class="class-C">維持</th>'
     for i in RANK_KEEPAREA:
         result += f"<td>{math.floor(playerCount*i)}位以上</td>"
     result += "</tr>\n"
 
-    result += '<tr><th class="class-B">降格ボーダー</th>'
+    result += '<tr><th class="class-B">降格</th>'
     for i in RANK_KEEPAREA:
         result += f"<td>{math.floor(playerCount*i)+1}位以下</td>"
     result += "</tr>\n"
@@ -76,6 +88,27 @@ def webViewer():
 @app.route("/css/<cssdata>")
 def ReturnCSS(cssdata:str):
     return render_template(f"css/{cssdata}")
+
+@app.route("/auth/discord", method = ["GET","POST"])
+def discordAuth():
+    code = request.args.get("code")
+    if code == None:
+        return redirect("https://discord.com/oauth2/authorize?client_id=1420093711110508595&response_type=code&redirect_uri=https%3A%2F%2Fvrchat.sakaduki.com%2Fauth%2Fdiscord&scope=identify")
+    else:
+        jsonBody = {
+            "client_id" : CLIENT_ID,
+            "client_secret" : CLIENT_SECRET,
+            "grant_type" : "authorization_code",
+            "code" : code,
+            "redirect_uri" : "https://vrchat.sakaduki.com/auth/discord",
+        }
+        r = requests.post("https://discordapp.com/api/oauth2/token", json=jsonBody)
+        if r.status_code != 200:
+            print(f"Failed Code Request\n{r.content}")
+            return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>"
+        
+
+    
 
 if __name__=="__main__":
     app.run(debug=False,port=10000)

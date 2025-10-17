@@ -6,10 +6,28 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 client = discord.Client(intents=discord.Intents.all())
+GUILD_ID = 1418884951629369366
+ADMIN_ROLE = [
+    1419207667171459074,
+    1422267076415848491
+]
 
 dukiGeneral.TryMakeDir("./data")
 dukiGeneral.TryMakeDir("./temp")
 
+@client.event
+async def on_ready():
+    guild = client.get_guild(GUILD_ID)
+    adminMenberIds = []
+
+    for member in guild.members:
+        for role in member.roles:
+            if role.id in ADMIN_ROLE:
+                adminMenberIds.append(str(member.id))
+                break
+    
+    with open("data/adminList.json", mode="w") as f:
+        json.dump(adminMenberIds , f)
 
 @client.event
 async def on_message(message:discord.Message):
@@ -25,7 +43,6 @@ async def on_message(message:discord.Message):
                 embed = discord.Embed(title="データを受け付けました",description="Data Recived")
                 embed.set_footer(f"date:<t:{time.time()}:F>")
                 await message.channel.send(embed=embed)
-
 
 
 def updateDataDict(fileName:str):
