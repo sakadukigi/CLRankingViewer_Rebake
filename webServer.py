@@ -1,6 +1,6 @@
 from flask import *
 import time,csv,os,math,requests
-import dukiGeneral,uuid
+import dukiGeneral,uuid,logging
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -106,7 +106,7 @@ def discordAuth():
         }
         r = requests.post("https://discordapp.com/api/oauth2/token", json=jsonBody)
         if r.status_code != 200:
-            print(f"Failed Code Request\n{r.content}")
+            logging.error(f"Failed Code Request\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
     
         token = f"Bearer {r.json['access_token']}"
@@ -114,9 +114,10 @@ def discordAuth():
         r = request.get("https://discordapp.com/api/users/@me", headers=headers)
 
         if r.status_code != 200:
-            print(f"Failed UserData Request\n{r.content}")
+            logging.error(f"Failed UserData Request\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>500 Internal Server Error</p><br><p>サーバー管理者にお問い合わせください</p>", 500
         if r.json["id"] not in adminList:
+            logging.warning(f"Cant Auth User\n{r.content}")
             return "<h1>Failed Auth by Discord</h1><br><p>403 Forbidden</p><br><p>権限がありません</p>", 403
         else:
             response = make_response("Auth!!!")
