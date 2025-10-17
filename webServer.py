@@ -95,7 +95,7 @@ def ReturnCSS(cssdata:str):
 def discordAuth():
     code = request.args.get("code")
 
-    if requests.cookies.get("sessionID") in loginSessions:
+    if request.cookies.get("sessionID") in loginSessions:
         return "You are Already Authed!!\n(あなたはすでに認証されています)", 200
 
     if code == None:
