@@ -98,8 +98,6 @@ def discordAuth():
         return redirect("https://discord.com/oauth2/authorize?client_id=1420093711110508595&response_type=code&redirect_uri=https%3A%2F%2Fvrchat.sakaduki.com%2Fauth%2Fdiscord&scope=identify")
     else:
         jsonBody = {
-            "client_id" : CLIENT_ID,
-            "client_secret" : CLIENT_SECRET,
             "grant_type" : "authorization_code",
             "code" : code,
             "redirect_uri" : "https://vrchat.sakaduki.com/auth/discord",
@@ -111,7 +109,7 @@ def discordAuth():
     
         token = f"Bearer {r.json['access_token']}"
         headers = {"Authorization": token}
-        r = request.get("https://discordapp.com/api/users/@me", headers=headers)
+        r = request.get("https://discordapp.com/api/users/@me", headers=headers, auth = (CLIENT_ID, CLIENT_SECRET))
 
         if r.status_code != 200:
             logging.error(f"Failed UserData Request\n{r.content}")
